@@ -3,8 +3,11 @@ import MainScene from './Mainscene';
 
 const ganeConfig: Phaser.Types.Core.GameConfig = {
   title: "YAAAKZ",
-  width: 1000,
-  height: 600,
+  width: 1984,
+  height: 1984,
+  scale: {
+    mode: Phaser.Scale.RESIZE,
+  },
   parent: "game",
   scene: [MainScene],
   physics: {
@@ -12,6 +15,10 @@ const ganeConfig: Phaser.Types.Core.GameConfig = {
     arcade: {
       debug: false,
     },
+  },
+  canvasStyle: "width: 100%; height: 100%sd",
+  render: {
+    pixelArt: true,
   },
   backgroundColor: "#999999",
 };

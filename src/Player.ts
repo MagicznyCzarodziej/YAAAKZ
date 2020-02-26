@@ -9,7 +9,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     config.scene.add.existing(this);
     config.scene.physics.add.existing(this, 0);
     config.scene.physics.world.enableBody(this, 0);
-    this.body.setSize(28, 28, true);
+    this.setOrigin(0.25, 0.5);
     this.body.setMaxSpeed(this.moveSpeed);
   }
 
@@ -26,9 +26,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.body.setVelocityY(verticalMove * this.moveSpeed);
   }
 
-  rotateToMouse() : void {
+  rotateToMouse() : void {    
     const mousePosition = this.scene.input.mousePointer.position;
-    const angle = Phaser.Math.Angle.BetweenPoints(this, mousePosition);
+    const center = new Phaser.Math.Vector2(this.scene.cameras.main.width/2, this.scene.cameras.main.height/2);
+    const angle = Phaser.Math.Angle.BetweenPoints(center, mousePosition);
     this.rotation = Phaser.Math.Angle.RotateTo(this.rotation, angle, 0.1);
   }
   
