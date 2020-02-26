@@ -16,7 +16,6 @@ const ganeConfig: Phaser.Types.Core.GameConfig = {
       debug: false,
     },
   },
-  canvasStyle: "width: 100%; height: 100%sd",
   render: {
     pixelArt: true,
   },
