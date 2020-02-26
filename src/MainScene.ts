@@ -2,9 +2,10 @@ import 'phaser';
 import Player from './Player';
 
 export default class MainScene extends Phaser.Scene {
-  private player: Player; 
+  public player: Player; 
   private walls: Phaser.Physics.Arcade.StaticGroup;
   private map: Phaser.Tilemaps.Tilemap;
+  public bullets: Phaser.Physics.Arcade.Group;
 
   constructor() { 
     super({
@@ -13,10 +14,15 @@ export default class MainScene extends Phaser.Scene {
   }
 
   preload(): void {
-    this.load.image('player', 'assets/player2.png');
+    this.load.image('player', 'assets/player.png');
     this.load.image('wall', 'assets/wall.png');
-    this.load.image('ground', 'assets/ground2.png');
+    this.load.image('ground', 'assets/ground2.png')
     this.load.tilemapTiledJSON('map', 'map.json');
+
+    // Weapons
+    this.load.image('weapon_M4', 'assets/weapon_M4.png');;
+    this.load.image('bullet', 'assets/bullet.png');
+    this.load.audio('weapon_M4_shot', 'assets/weapon_M4_shot.wav');
   }
 
   create() {
@@ -38,13 +44,14 @@ export default class MainScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, mapWidth, mapHeight);
 
     this.input.setDefaultCursor('crosshair');
+    this.input.mouse.disableContextMenu();
   }
 
-  update() {
+  update(time, deltaTime) {
     this.physics.world.wrap(this.player, 5);
 
     this.moveCamera();
-    this.player.update();
+    this.player.update(deltaTime);
   }
 
   createPlayer() {
