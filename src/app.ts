@@ -1,7 +1,7 @@
 import 'phaser';
 import MainScene from './Mainscene';
 
-const ganeConfig: Phaser.Types.Core.GameConfig = {
+const gameConfig: Phaser.Types.Core.GameConfig = {
   title: "YAAAKZ",
   width: 1984,
   height: 1984,
@@ -29,5 +29,5 @@ export class YAAAKZ extends Phaser.Game {
 }
 
 window.onload = () => {
-  const game = new YAAAKZ(ganeConfig);
+  const game = new YAAAKZ(gameConfig);
 };
