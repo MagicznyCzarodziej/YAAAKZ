@@ -75,3 +75,5 @@ export class M4 extends Weapon {
     });
   }
 }
+
+export const MOVING_SPREAD_MODIFIER = 2;

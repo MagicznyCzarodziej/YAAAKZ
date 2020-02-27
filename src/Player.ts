@@ -54,16 +54,22 @@ export default class Player extends Phaser.GameObjects.Container {
   shoot() {
     const bulletOffset = new Phaser.Geom.Point(this.weapon.offsetX, this.weapon.offsetY);
     Phaser.Math.Rotate(bulletOffset, this.rotation);
+    
     // Compensation for drifting around when player is moving
     const driftCompensation = this.body.velocity.clone().normalize().scale(2);
-    const spread = Phaser.Math.RND.normal() * this.weapon.spread;
-    new Bullet(
+
+    // Fire spread
+    let spread = Phaser.Math.RND.normal() * this.weapon.spread;
+    if (this.body.speed > 0) spread *= Weapons.MOVING_SPREAD_MODIFIER;
+    this.angle += spread;
+
+    this.scene.bullets.add(new Bullet(
       this.scene,
       this.x + bulletOffset.x + driftCompensation.x,
       this.y + bulletOffset.y + driftCompensation.y,
       this.weapon.ammoType,
-      this.angle + spread,
-    );
+      this.angle,
+    ));
 
     const recoil = new Phaser.Math.Vector2(bulletOffset).normalize().scale(-50);
     this.body.setVelocity(recoil.x, recoil.y);
