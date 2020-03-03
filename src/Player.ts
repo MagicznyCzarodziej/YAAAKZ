@@ -40,13 +40,13 @@ export default class Player {
     const offsetY = 8 // Verticel distance from player sprite origin (head) to weapon
     const rotationOrigin = new Phaser.Geom.Point(0, offsetY);
     Phaser.Math.Rotate(rotationOrigin, this.container.rotation);
-    const mousePosition = this.scene.input.mousePointer.position;
+    const mousePosition = this.scene.input.mousePointer.positionToCamera(this.scene.cameras.main);
     const rotationOffset = new Phaser.Math.Vector2(
-      this.scene.cameras.main.centerX + rotationOrigin.x,
-      this.scene.cameras.main.centerY + rotationOrigin.y
+      this.container.x+ rotationOrigin.x,
+      this.container.y + rotationOrigin.y
     );
-    const angle = Phaser.Math.Angle.BetweenPoints(rotationOffset, mousePosition);
-    this.container.rotation = Phaser.Math.Angle.RotateTo(this.container.rotation, angle, 0.1);
+    const angleRad = Phaser.Math.Angle.BetweenPoints(rotationOffset, mousePosition);
+    this.container.rotation = Phaser.Math.Angle.RotateTo(this.container.rotation, angleRad, 0.1);
   }
 
   shoot() {
