@@ -48,8 +48,6 @@ export abstract class Weapon extends Phaser.GameObjects.Sprite implements Weapon
 
     this.setOrigin(0);
     this.scene.add.existing(this);
-    this.scene.physics.add.existing(this, false);
-    this.scene.physics.world.enableBody(this, 0);
   }
 }
 

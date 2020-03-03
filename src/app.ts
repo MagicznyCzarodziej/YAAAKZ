@@ -11,9 +11,13 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
   parent: "game",
   scene: [MainScene],
   physics: {
-    default: 'arcade',
-    arcade: {
-      debug: false,
+    default: 'matter',
+    matter: {
+      gravity: false,
+      debug: {
+        showBody: false,
+        showStaticBody: false,
+      }
     },
   },
   render: {

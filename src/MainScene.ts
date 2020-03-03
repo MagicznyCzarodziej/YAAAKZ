@@ -2,10 +2,11 @@ import 'phaser';
 import Player from './Player';
 
 export default class MainScene extends Phaser.Scene {
-  public player: Player; 
-  private walls: Phaser.Physics.Arcade.StaticGroup;
+  public player//: Player; 
+  //private walls: Phaser.Physics.Arcade.StaticGroup;
   private map: Phaser.Tilemaps.Tilemap;
-  public bullets: Phaser.Physics.Arcade.Group;
+  public bullets: Phaser.GameObjects.Group;
+  //private layer02;
 
   constructor() { 
     super({
@@ -15,12 +16,12 @@ export default class MainScene extends Phaser.Scene {
 
   preload(): void {
     this.load.image('player', 'assets/player.png');
-    this.load.image('wall', 'assets/wall.png');
+    this.load.image('wall', 'assets/wall2.png');
     this.load.image('ground', 'assets/ground2.png')
     this.load.tilemapTiledJSON('map', 'map.json');
 
     // Weapons
-    this.load.image('weapon_M4', 'assets/weapon_M4.png');;
+    this.load.image('weapon_M4', 'assets/weapon_M4.png');
     this.load.image('bullet', 'assets/bullet.png');
     this.load.audio('weapon_M4_shot', 'assets/weapon_M4_shot.wav');
   }
@@ -29,38 +30,32 @@ export default class MainScene extends Phaser.Scene {
     this.cameras.main.setZoom(2);
 
     this.map = this.add.tilemap("map");
-    const tileset = this.map.addTilesetImage('ground', 'ground');
-    const layer = this.map.createStaticLayer('layer01', tileset);
-
+    const ground = this.map.addTilesetImage('ground', 'ground');
+    //const wall = this.map.addTilesetImage('wall', 'wall');
+    const layer01 = this.map.createStaticLayer('layer01', ground);
+    //this.layer02 = this.map.createDynamicLayer('layer02', wall);
     this.createPlayer();
+    //this.map.setCollisionByExclusion([-1], true, true, this.layer02);
 
     // Wrap world for the player
     const mapWidth = this.map.width*this.map.tileWidth;
     const mapHeight = this.map.height*this.map.tileHeight;
-    this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
-    this.physics.add.collider(this.player, this.walls);
-
-    this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
+    
+    this.cameras.main.startFollow(this.player.container, true, 0.05, 0.05);
     this.cameras.main.setBounds(0, 0, mapWidth, mapHeight);
 
     this.input.setDefaultCursor('crosshair');
     this.input.mouse.disableContextMenu();
+    this.bullets = this.add.group();
   }
 
   update(time, deltaTime) {
-    this.physics.world.wrap(this.player, 5);
-
     this.moveCamera();
     this.player.update(deltaTime);
   }
 
   createPlayer() {
-    this.player = new Player({
-      scene: this,
-      x: 600,
-      y: 600,
-      sprite: 'player',
-    });
+    this.player = new Player(this, 600, 600, 'player');
   }
 
   moveCamera() {

@@ -1,19 +1,18 @@
 import 'phaser';
 
-export default class Bullet extends Phaser.GameObjects.Image {
-  body: Phaser.Physics.Arcade.Body;
-  speed = 1100;
+export default class Bullet extends Phaser.Physics.Matter.Image {
+  speed = 40;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, sprite: string, angle) {
-    super(scene, x, y, sprite);
+  constructor(scene: Phaser.Scene, x: number, y: number, sprite: string, angleRad) {
+    super(scene.matter.world, x, y, sprite);
+    this.setOrigin(0);
+    this.setFrictionAir(0);
+    this.setCollidesWith(0)
     scene.add.existing(this);
-    scene.physics.add.existing(this, false);
-    scene.physics.world.enableBody(this, 0);
 
-    this.setOrigin(0, 0);
-    this.setAngle(angle);
-    const velocity = new Phaser.Math.Vector2();
-    this.scene.physics.velocityFromAngle(angle, this.speed, velocity);
-    this.body.setVelocity(velocity.x, velocity.y);
+    this.setRotation(angleRad);
+    const velocityX = this.speed * Math.cos(angleRad);
+    const velocityY = this.speed * Math.sin(angleRad);
+    this.setVelocity(velocityX, velocityY);
   }
 }
