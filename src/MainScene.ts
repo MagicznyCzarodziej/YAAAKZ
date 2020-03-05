@@ -6,8 +6,8 @@ export default class MainScene extends Phaser.Scene {
   //private walls: Phaser.Physics.Arcade.StaticGroup;
   private map: Phaser.Tilemaps.Tilemap;
   public bullets: Phaser.GameObjects.Group;
-  //private layer02;
-
+  private layer02;
+  public ammoText: Phaser.GameObjects.Text;
   constructor() { 
     super({
       key: 'MainScene',
@@ -22,31 +22,35 @@ export default class MainScene extends Phaser.Scene {
 
     // Weapons
     this.load.image('weapon_M4', 'assets/weapon_M4.png');
+    this.load.image('weapon_SMG', 'assets/weapon_SMG.png');
     this.load.image('bullet', 'assets/bullet.png');
     this.load.audio('weapon_M4_shot', 'assets/weapon_M4_shot.wav');
   }
 
   create() {
     this.cameras.main.setZoom(2);
-
+    
     this.map = this.add.tilemap("map");
-    const ground = this.map.addTilesetImage('ground', 'ground');
-    //const wall = this.map.addTilesetImage('wall', 'wall');
+    const ground = this.map.addTilesetImage('ground', 'ground', 32, 32, 1, 2);
+    const wall = this.map.addTilesetImage('wall', 'wall');
     const layer01 = this.map.createStaticLayer('layer01', ground);
-    //this.layer02 = this.map.createDynamicLayer('layer02', wall);
+    this.layer02 = this.map.createDynamicLayer('layer02', wall);
     this.createPlayer();
-    //this.map.setCollisionByExclusion([-1], true, true, this.layer02);
-
+    this.map.setCollisionByExclusion([-1], true, true, this.layer02);
+    this.matter.world.convertTilemapLayer(this.layer02);
+    
     // Wrap world for the player
     const mapWidth = this.map.width*this.map.tileWidth;
     const mapHeight = this.map.height*this.map.tileHeight;
     
     this.cameras.main.startFollow(this.player.container, true, 0.05, 0.05);
     this.cameras.main.setBounds(0, 0, mapWidth, mapHeight);
-
+    
     this.input.setDefaultCursor('crosshair');
     this.input.mouse.disableContextMenu();
     this.bullets = this.add.group();
+    
+    this.ammoText = this.add.text(400, 640, 'Amunicja').setScrollFactor(0);
   }
 
   update(time, deltaTime) {

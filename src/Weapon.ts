@@ -5,73 +5,68 @@ enum AmmoType {
   PELLET = 'pellet',
 };
 
-type WeaponConfig = {
-  scene: Phaser.Scene;
-  x: number;
-  y: number;
+export default interface Weapon {
   sprite: string;
   shotSound: string;
   reloadSound: string;
   displayName: string;
+  bulletX: number;
+  bulletY: number;
   offsetX: number;
   offsetY: number;
   spread: number
+  shakeIntensity: number;
+  recoil: number;
   delay: number;
   reloadTime: number;
   ammoType: AmmoType;
   maxMags: number;
   magCapacity: number;
-  ammo: number;
-};
-
-export abstract class Weapon extends Phaser.GameObjects.Sprite implements WeaponConfig{
-  scene: Phaser.Scene;
-  x: number;
-  y: number;
-  sprite: string;
-  shotSound: string;
-  reloadSound: string;
-  displayName: string;
-  offsetX: number;
-  offsetY: number;
-  spread: number;
-  delay: number;
-  reloadTime: number;
-  ammoType: AmmoType;
-  maxMags: number;
-  magCapacity: number;
-  ammo: number = 0;
-
-  constructor(config: WeaponConfig) {
-    super(config.scene, config.x, config.y, config.sprite);
-    Object.assign(this, config);
-
-    this.setOrigin(0);
-    this.scene.add.existing(this);
-  }
+  currentMag: number;
+  mags: number;
+  damage: number;
 }
 
-export class M4 extends Weapon {
-  constructor(scene: Phaser.Scene, x: number, y: number) {
-    super({
-      scene: scene,
-      x: x,
-      y: y,
-      sprite: 'weapon_M4',
-      shotSound: 'weapon_M4_shot',
-      reloadSound: '',
-      displayName: 'Karabin M4',
-      offsetX: 35,
-      offsetY: 5,
-      spread: 2,
-      delay: 100,
-      reloadTime: 1000,
-      ammoType: AmmoType.BULLET,
-      maxMags: 5,
-      magCapacity: 30,
-      ammo: 150,
-    });
-  }
+export class M4 implements Weapon {
+  public sprite = 'weapon_M4';
+  public shotSound = 'weapon_M4_shot';
+  public reloadSound = '';
+  public displayName = 'Karabin M4';
+  public bulletX = 51;
+  public bulletY = 6;
+  public offsetX = 3;
+  public offsetY = 2;
+  public spread = 2.5;
+  public shakeIntensity = 0.0008;
+  public recoil = 0.0002;
+  public delay = 110;
+  public reloadTime = 3000;
+  public ammoType = AmmoType.BULLET;
+  public maxMags = 5;
+  public magCapacity = 30;
+  public currentMag = 30;
+  public mags = 3;
+  public damage = 30;
 }
 
-export const MOVING_SPREAD_MODIFIER = 2;
+export class SMG implements Weapon {
+  public sprite = 'weapon_SMG';
+  public shotSound = 'weapon_M4_shot';
+  public reloadSound = '';
+  public displayName = 'SMG';
+  public bulletX = 51;
+  public bulletY = 6;
+  public offsetX = 7;
+  public offsetY = 0;
+  public spread = 4;
+  public shakeIntensity = 0.0006;
+  public recoil = 0.0001;
+  public delay = 50;
+  public reloadTime = 1000;
+  public ammoType = AmmoType.BULLET;
+  public maxMags = 4;
+  public magCapacity = 20;
+  public currentMag = 20;
+  public mags = 4;
+  public damage = 10;
+}
